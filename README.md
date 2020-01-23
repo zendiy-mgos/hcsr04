@@ -31,6 +31,37 @@ Initialize the sensor instance. Return an opaque sensor's handle, or `NULL` on e
 
 **Example** - Initialize HC-SR04 sensor instance.
 ```c
-struct mgos_hcsr04 *hcsr04 = mgos_hcsr04_create(2, 4);
+struct mgos_hcsr04 *handle = mgos_hcsr04_create(2, 4);
+```
+### mgos_hcsr04_get_distance()
+```c
+float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
+```
+Return distance in millimiters or 'NAN' on failure.
+
+|Parameter||
+|--|--|
+|handle|Sensor's handle.|
+
+**Example** - Initialize HC-SR04 sensor instance and read the measured distance.
+```c
+struct mgos_hcsr04 *handle = mgos_hcsr04_create(2, 4);
+float distance = mgos_hcsr04_get_distance(handle);
+```
+### mgos_hcsr04_close()
+```c
+void mgos_hcsr04_close(struct mgos_hcsr04 *handle);
+```
+Close the sensor's handle.
+
+|Parameter||
+|--|--|
+|handle|Sensor's handle.|
+
+**Example** - Initialize HC-SR04 sensor, read the measured distance and then close the instance.
+```c
+struct mgos_hcsr04 *handle = mgos_hcsr04_create(2, 4);
+float distance = mgos_hcsr04_get_distance(handle);
+mgos_hcsr04_close(handle);
 ```
 ## JS API Reference
