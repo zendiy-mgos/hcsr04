@@ -1,5 +1,5 @@
 // HC-SR04 Driver. Source C API is defined at:
-// [mgos_hcsr04.h](https://github.com/?/mgos_hcsr04/tree/master/src/mgos_hcsr04.h)
+// [mgos_hcsr04.h](https://github.com/zendiy-mgos/hcsr04/blob/master/include/mgos_hcsr04.h)
 
 let HCSR04 = {
   _crt: ffi('void *mgos_hcsr04_create(int, int)'),
