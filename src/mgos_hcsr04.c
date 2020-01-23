@@ -36,7 +36,7 @@ static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
     }
   }  
   // wait for the pulse to stop
-  uint64_t start = uptime();
+  uint64_t start = mg_trig_echo_uptime();
   while (mgos_gpio_read(echo_pin) == 1) {
     if ((mg_trig_echo_uptime() - startMicros) > timeout) {
       return NAN;
@@ -61,7 +61,7 @@ float mg_trig_echo_get_distance(int trig_pin, uint32_t trig_duration,
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
   if (!mgos_gpio_set_mode(trig_pin, MGOS_GPIO_MODE_OUTPUT) ||
       !mgos_gpio_set_mode(echo_pin, MGOS_GPIO_MODE_INPUT) ||
-      !mgos_gpio_set_pull(echo_pin, MGOS_GPIO_PULL_UP));
+      !mgos_gpio_set_pull(echo_pin, MGOS_GPIO_PULL_UP)) return NULL;
 
   struct mgos_hcsr04 *handle = calloc(1, sizeof(*handle));
   if (handle == NULL) return NULL;
