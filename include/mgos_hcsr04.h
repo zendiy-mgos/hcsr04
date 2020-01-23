@@ -32,10 +32,10 @@ extern "C" {
 /* Opaque sensor's handle */
 struct mgos_hcsr04;
 
-/* Initialize DPS sensor. Return an opaque sensor's handle, or `NULL` on error. */
+/* Initialize the sensor. Return an opaque sensor's handle, or `NULL` on error. */
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin);
 
-/* Close DPS handle. */
+/* Close sensor's handle. */
 void mgos_hcsr04_close(struct mgos_hcsr04 *handle);
 
 /* Return distance in millimiters or 'NAN' on failure. */
