@@ -14,7 +14,7 @@ let HCSR04 = {
   // ```javascript
   // let sensor = HCSR04.create(2, 4);
   // let d = sensor.getDistance();
-  // print('Distance: ', (isNaN(d) ? 'error reading distance' : d));
+  // print('Distance:', (isNaN(d) ? 'error reading distance' : d));
   // ```
   create: function(trig_pin, echo_pin) {
     let handle = HCSR04._crt(trig_pin, echo_pin);
