@@ -95,7 +95,7 @@ Return distance in millimiters or 'NaN' on failure.
 ```js
 let myHCSR04 = HCSR04.create(2, 4);
 let distance = myHCSR04.getDistance();
-print('Distance: ', (isNaN(distance) ? 'error reading distance' : distance));
+print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
 ### <sensor_instance>.close()
 ```js
