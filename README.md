@@ -43,7 +43,7 @@ Return distance in millimiters or 'NAN' on failure.
 |--|--|
 |sensor|Sensor instance.|
 
-**Example** - Create and initialize an HC-SR04 sensor instance, and print the measured distance.
+**Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
 float distance = mgos_hcsr04_get_distance(my_hcsr04);
@@ -62,14 +62,11 @@ Close/destroy the sensor instance.
 |--|--|
 |sensor|Sensor instance.|
 
-**Example** - Create and initialize an HC-SR04 sensor instance, print the measured distance and then close the instance.
+**Example** - Create and initialize an HC-SR04 sensor instance, do something(...) and then close the instance.
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
 float distance = mgos_hcsr04_get_distance(my_hcsr04);
-if (distance != NAN)
-  LOG(LL_INFO, ("Distance: %.2lf", distance));
-else
-  LOG(LL_ERROR, ("Distance: error reading distance"));
+...
 mgos_hcsr04_close(my_hcsr04);
 ```
 ## JS API Reference
@@ -94,7 +91,7 @@ let distance myHCSR04.getDistance();
 ```
 Return distance in millimiters or 'NaN' on failure.
 
-**Example** - Create and initialize an HC-SR04 sensor instance, and print the measured distance.
+**Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```js
 let myHCSR04 = HCSR04.create(2, 4);
 let distance = myHCSR04.getDistance();
@@ -106,10 +103,9 @@ myHCSR04.close();
 ```
 Close/destroy the sensor instance.
 
-**Example** - Create and initialize an HC-SR04 sensor instance, print the measured distance and then close the instance.
+**Example** - Create and initialize an HC-SR04 sensor instance, do something(...) and then close the instance.
 ```js
 let myHCSR04 = HCSR04.create(2, 4);
-let distance = myHCSR04.getDistance();
-print('Distance: ', (isNaN(distance) ? 'error reading distance' : distance));
+...
 myHCSR04.close();
 ```
