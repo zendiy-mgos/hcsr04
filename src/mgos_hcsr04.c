@@ -7,7 +7,6 @@ struct mgos_hcsr04 {
 };
 
 static inline void mg_play_trig_sound(int trig_pin, uint32_t duration) {
-  LOG(LL_INFO, ("Sending TRIG on pin %d (%d milliseconds)...", trig_pin, duration));
   //send trigger
   mgos_gpio_write(trig_pin, 1);
   // wait 'duration' microseconds (e.g.: 10)
@@ -22,7 +21,6 @@ static inline uint64_t uptime() {
 
 static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
   if (timeout == 0) timeout = 1000000L;
-  LOG(LL_INFO, ("Awaiting ECHO on pin %d (timeout %d milliseconds)...", echo_pin, timeout));
   
   uint64_t startMicros = uptime();
 
@@ -50,7 +48,6 @@ static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
   }
 
   float duration = (uptime() - start);
-  LOG(LL_INFO, ("Echo duration %f", duration));     
   return duration;
 }
 
