@@ -16,7 +16,7 @@ static inline void mg_play_trig_sound(int trig_pin, uint32_t duration) {
   mgos_gpio_write(trig_pin, 0);
 }
 
-static inline uint64_t mg_trig_echo_uptime() {
+static inline uint64_t uptime() {
   return (uint64_t)(1000000 * mgos_uptime());
 }
 
@@ -24,32 +24,32 @@ static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
   if (timeout == 0) timeout = 1000000L;
   LOG(LL_INFO, ("Awaiting ECHO on pin %d (timeout %d milliseconds)...", echo_pin, timeout));
   
-  uint64_t startMicros = mg_trig_echo_uptime();
+  uint64_t startMicros = uptime();
 
   // wait for any previous pulse to end
   while (mgos_gpio_read(echo_pin) == 1) {
-    if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+    if ((uptime() - startMicros) > timeout) {
       LOG(LL_ERROR, ("Error awaiting previous pulse to end, on pin %d", echo_pin));  
       return NAN;
     }
   }
   // wait for the pulse to start
   while (mgos_gpio_read(echo_pin) != 1) {
-    if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+    if ((uptime() - startMicros) > timeout) {
       LOG(LL_ERROR, ("Error awaiting pulse to start, on pin %d", echo_pin));  
       return NAN;
     }
   }  
   // wait for the pulse to stop
-  uint64_t start = mg_trig_echo_uptime();
+  uint64_t start = uptime();
   while (mgos_gpio_read(echo_pin) == 1) {
-    if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+    if ((uptime() - startMicros) > timeout) {
       LOG(LL_ERROR, ("Error awaiting pulse to stop, on pin %d", echo_pin));  
       return NAN;
     }
   }
 
-  float duration = (mg_trig_echo_uptime() - start);
+  float duration = (uptime() - start);
   LOG(LL_INFO, ("Echo duration %f", duration));     
   return duration;
 }
@@ -67,8 +67,8 @@ float mg_trig_echo_get_distance(int trig_pin, uint32_t trig_duration,
 
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
   if (!mgos_gpio_set_mode(trig_pin, MGOS_GPIO_MODE_OUTPUT) ||
-      !mgos_gpio_set_mode(echo_pin, MGOS_GPIO_MODE_INPUT) ||
-      !mgos_gpio_set_pull(echo_pin, MGOS_GPIO_PULL_UP)) return NULL;
+      !mgos_gpio_set_mode(echo_pin, MGOS_GPIO_MODE_INPUT)/*  ||
+      !mgos_gpio_set_pull(echo_pin, MGOS_GPIO_PULL_UP) */) return NULL;
 
   struct mgos_hcsr04 *handle = calloc(1, sizeof(*handle));
   if (handle == NULL) return NULL;
