@@ -63,8 +63,8 @@ float mg_trig_echo_get_distance(int trig_pin, uint32_t trig_duration,
 }
 
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
-  if (!mgos_gpio_setup_output(sensor->trigger_pin, 0) ||
-      !mgos_gpio_setup_input(sensor->echo_pin, MGOS_GPIO_PULL_UP)) {
+  if (!mgos_gpio_setup_output(trig_pin, 0) ||
+      !mgos_gpio_setup_input(echo_pin, MGOS_GPIO_PULL_UP)) {
     return NULL;
   }
   struct mgos_hcsr04 *handle = calloc(1, sizeof(*handle));
