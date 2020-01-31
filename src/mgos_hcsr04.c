@@ -7,9 +7,10 @@ struct mgos_hcsr04 {
 };
 
 static inline void mg_play_trig_sound(int trig_pin, uint32_t duration) {
+  LOG(LL_INFO, ("Sending TRIG on pin %d (%d milliseconds)...", trig_pin, duration));
   //send trigger
   mgos_gpio_write(trig_pin, 1);
-  // wait 10 microseconds
+  // wait 'duration' microseconds (e.g.: 10)
   mgos_usleep(duration);
   // stop the trigger
   mgos_gpio_write(trig_pin, 0);
@@ -21,17 +22,21 @@ static inline uint64_t mg_trig_echo_uptime() {
 
 static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
   if (timeout == 0) timeout = 1000000L;
+  LOG(LL_INFO, ("Awaiting ECHO on pin %d (timeout %d milliseconds)...", echo_pin, timeout));
+  
   uint64_t startMicros = mg_trig_echo_uptime();
 
   // wait for any previous pulse to end
   while (mgos_gpio_read(echo_pin) == 1) {
     if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+      LOG(LL_ERROR, ("Error awaiting previous pulse to end, on pin %d", echo_pin));  
       return NAN;
     }
   }
   // wait for the pulse to start
   while (mgos_gpio_read(echo_pin) != 1) {
     if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+      LOG(LL_ERROR, ("Error awaiting pulse to start, on pin %d", echo_pin));  
       return NAN;
     }
   }  
@@ -39,11 +44,13 @@ static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
   uint64_t start = mg_trig_echo_uptime();
   while (mgos_gpio_read(echo_pin) == 1) {
     if ((mg_trig_echo_uptime() - startMicros) > timeout) {
+      LOG(LL_ERROR, ("Error awaiting pulse to stop, on pin %d", echo_pin));  
       return NAN;
     }
   }
 
   float duration = (mg_trig_echo_uptime() - start);
+  LOG(LL_INFO, ("Echo duration %f", duration));     
   return duration;
 }
 
