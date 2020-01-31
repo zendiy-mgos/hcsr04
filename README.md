@@ -47,7 +47,7 @@ Return distance in millimiters or 'NAN' on failure.
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
 float distance = mgos_hcsr04_get_distance(my_hcsr04);
-if (distance != NAN)
+if (!isnan(distance))
   LOG(LL_INFO, ("Distance: %.2lf", distance));
 else
   LOG(LL_ERROR, ("Distance: error reading distance"));
