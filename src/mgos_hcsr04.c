@@ -86,6 +86,20 @@ float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) {
     10, handle->echo_pin, 0);
 }
 
+float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle, int count) {
+  if (handle == NULL || count <= 0) return NAN;
+  int not_nan_count = 0;
+  float result = 0;
+  for (int i = 0; i < count; ++i) {
+    float m = mgos_hcsr04_get_distance(handle);
+    if (!isnan(m)) {
+      result += m;
+      ++not_nan_count;
+    }
+  }
+  return (not_nan_count == 0 ? NAN : (result / not_nan_count));
+}
+
 bool mgos_hcsr04_init(void) {
   return true;
 }
