@@ -52,6 +52,26 @@ if (!isnan(distance))
 else
   LOG(LL_ERROR, ("Distance: error reading distance"));
 ```
+### mgos_hcsr04_get_distance_avg()
+```c
+float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
+```
+Perform multiple measurements and return the average distance in millimiters or 'NAN' on failure.
+
+|Parameter||
+|--|--|
+|sensor|Sensor instance.|
+|count|How many measurements to perform.|
+
+**Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
+```c
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
+float distance = mgos_hcsr04_get_distance_avg(my_hcsr04, 10);
+if (!isnan(distance))
+  LOG(LL_INFO, ("Distance: %.2lf", distance));
+else
+  LOG(LL_ERROR, ("Distance: error reading distance"));
+```
 ### mgos_hcsr04_close()
 ```c
 void mgos_hcsr04_close(struct mgos_hcsr04 *sensor);

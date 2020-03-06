@@ -43,7 +43,7 @@ void mgos_hcsr04_close(struct mgos_hcsr04 *handle);
 /* Return distance in millimiters or 'NAN' on failure. */
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
 
-/* Perform multiple measurements and return
+/* Perform multiple measurements and return the average
  * distance in millimiters or 'NAN' on failure.
  */
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count) {
