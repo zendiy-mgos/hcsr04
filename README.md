@@ -37,7 +37,7 @@ struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```c
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *sensor);
 ```
-Return distance in millimiters or 'NAN' on failure.
+Return distance in millimiters or `NaN` on failure.
 
 |Parameter||
 |--|--|
@@ -56,7 +56,7 @@ else
 ```c
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
 ```
-Perform multiple measurements and return the average distance in millimiters or 'NAN' on failure.
+Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
 
 |Parameter||
 |--|--|
@@ -109,12 +109,28 @@ let myHCSR04 = HCSR04.create(2, 12);
 ```js
 let distance myHCSR04.getDistance();
 ```
-Return distance in millimiters or 'NaN' on failure.
+Return distance in millimiters or `NaN` on failure.
 
 **Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```js
 let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getDistance();
+print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
+```
+### <sensor_instance>.getAvgDistance()
+```js
+let distance myHCSR04.getAvgDistance(count);
+```
+Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
+
+|Parameter||
+|--|--|
+|count|How many measurements to perform.|
+
+**Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
+```js
+let myHCSR04 = HCSR04.create(2, 12);
+let distance = myHCSR04.getAvgDistance(10);
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
 ### <sensor_instance>.close()
