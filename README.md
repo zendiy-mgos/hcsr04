@@ -37,7 +37,7 @@ struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```c
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *sensor);
 ```
-Return distance in millimiters or `NaN` on failure.
+Return distance in millimiters or `NAN` on failure.
 
 |Parameter||
 |--|--|
@@ -56,7 +56,7 @@ else
 ```c
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
 ```
-Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
+Perform multiple measurements and return the average distance in millimiters or `NAN` on failure.
 
 |Parameter||
 |--|--|

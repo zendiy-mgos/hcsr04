@@ -46,19 +46,7 @@ float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
 /* Perform multiple measurements and return the average
  * distance in millimiters or 'NAN' on failure.
  */
-float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count) {
-  if (sensor == NULL || count <= 0) return NAN;
-  int not_nan_count = 0;
-  float result = 0;
-  for (int i = 0; i < count; ++i) {
-    float m = mgos_hcsr04_get_distance(sensor);
-    if (!isnan(m)) {
-      result += m;
-      ++not_nan_count;
-    }
-  }
-  return (not_nan_count == 0 ? NAN : (result / not_nan_count));
-}
+float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
 
 #ifdef __cplusplus
 }
