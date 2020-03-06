@@ -31,7 +31,7 @@ Create and initialize the sensor instance. Return the instance, or `NULL` on err
 
 **Example** - Create and initialize an HC-SR04 sensor instance.
 ```c
-struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```
 ### mgos_hcsr04_get_distance()
 ```c
@@ -45,7 +45,7 @@ Return distance in millimiters or 'NAN' on failure.
 
 **Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```c
-struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 float distance = mgos_hcsr04_get_distance(my_hcsr04);
 if (!isnan(distance))
   LOG(LL_INFO, ("Distance: %.2lf", distance));
@@ -64,7 +64,7 @@ Close/destroy the sensor instance.
 
 **Example** - Create and initialize an HC-SR04 sensor instance, do something(...) and then close the instance.
 ```c
-struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 4);
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 float distance = mgos_hcsr04_get_distance(my_hcsr04);
 ...
 mgos_hcsr04_close(my_hcsr04);
@@ -83,7 +83,7 @@ Create and initialize the sensor instance. Return the instance, or `null` on err
 
 **Example** - Create and initialize an HC-SR04 sensor instance.
 ```js
-let myHCSR04 = HCSR04.create(2, 4);
+let myHCSR04 = HCSR04.create(2, 12);
 ```
 ### <sensor_instance>.getDistance()
 ```js
@@ -93,7 +93,7 @@ Return distance in millimiters or 'NaN' on failure.
 
 **Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```js
-let myHCSR04 = HCSR04.create(2, 4);
+let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getDistance();
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
@@ -105,7 +105,7 @@ Close/destroy the sensor instance.
 
 **Example** - Create and initialize an HC-SR04 sensor instance, do something(...) and then close the instance.
 ```js
-let myHCSR04 = HCSR04.create(2, 4);
+let myHCSR04 = HCSR04.create(2, 12);
 ...
 myHCSR04.close();
 ```
