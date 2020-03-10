@@ -5,7 +5,7 @@ let HCSR04 = {
   _crt: ffi('void *mgos_hcsr04_create(int, int)'),
   _cls: ffi('void mgos_hcsr04_close(void *)'),
   _gd: ffi('float mgos_hcsr04_get_distance(void *)'),
-  _gavgd: ffi('float mgos_hcsr04_get_distance_avg(void *, int)'),
+  _gavgd: ffi('float mgos_hcsr04_get_distance_avg(void *, int, int)'),
 
   // **`HCSR04.create(trig_pin, echo_pin)`**
   // Create a HC-SR04 sensor instance.
@@ -39,11 +39,15 @@ let HCSR04 = {
       return HCSR04._gd(this.handle);
     },
 
-    // **`sensor.getAvgDistance(count)`**
-    // Perform multiple measurements and return the average distance
-    // in millimiters or 'NaN' in case of a failure.
-    getAvgDistance: function(count) {
-      return HCSR04._gavgd(this.handle, count);
+    // **`sensor.getAvgDistance(attemptsCount, attemptsDelay)`**
+    // Perform multiple measurement attempts and return the average
+    // distance (in millimiters) or 'NaN' in case of a failure.
+    // If attemptsDelay is 0(zero) or not specified, the default
+    // 5ms delay value is used. 
+    getAvgDistance: function(attemptsCount, attemptsDelay) {
+      return HCSR04._gavgd(this.handle,
+                           attemptsCount,
+                           (attemptsDelay || 0));
     },
   },
 };
