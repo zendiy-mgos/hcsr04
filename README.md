@@ -1,6 +1,6 @@
 # HC-SR04 Driver
 ## Overview
-A Mongoose OS library for HC-SR04, a popular ultrasonic distance sensor.
+A Mongoose OS library for HC-SR04, a popular ultrasonic distance sensor, and for a bunch of [compatible sensors](#compatible-sensors).
 ## GET STARTED
 Build up your device in few minutes just starting from one of the following samples.
 
