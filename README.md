@@ -150,3 +150,10 @@ let myHCSR04 = HCSR04.create(2, 12);
 ...
 myHCSR04.close();
 ```
+## Compatible sensors
+You can use one of the following sensors.
+||Model|Notes|
+|--|--|--|
+|![hc-sr04 sensor](docs/hc-sr04.jpg)|HC-SR04|This sensor usually runs on 5V. If your MCU's GPIOs run on 3.3V (like ESP8266 GPIOs), **you must use the newer version** that natively supports 3.3V voltage. Otherwise, you must hack the circuit according this [anjoschu's post](https://www.instructables.com/id/Modify-Ultrasonic-Sensors-for-3-Volts-Logic-prepar/).|
+|![rcw-0001 sensor](docs/rcw-0001.png)|RCW-0001|This sensor natively supports both 3.3V and 5V voltages. It is fully equivalent to the HC-SR04 sensor.|
+|![us-100 sensor](docs/us-100.jpg)|US-100|The US-100 is very similar to the popular HC-SR04 ultrasonic sensors. This sensor can run from 3-5V so you don't need any logic level shifters or dividers. Just power from whatever your microcontroller provides. It supports both "HC-SR04" mode and "Serial UART" mode, but the "HC-SR04" mode must be set for using this library.|
