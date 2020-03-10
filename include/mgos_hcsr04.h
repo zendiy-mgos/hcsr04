@@ -29,6 +29,8 @@
 extern "C" {
 #endif
 
+#define DEFAULT_AVG_ATTEMPTS_DELAY 5
+
 /* Opaque sensor's handle */
 struct mgos_hcsr04;
 
@@ -46,7 +48,9 @@ float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
 /* Perform multiple measurements and return the average
  * distance in millimiters or 'NAN' on failure.
  */
-float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
+float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor,
+                                   int attempts_count,
+                                   int attempts_delay);
 
 #ifdef __cplusplus
 }
