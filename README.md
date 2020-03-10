@@ -54,19 +54,23 @@ else
 ```
 ### mgos_hcsr04_get_distance_avg()
 ```c
-float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor, int count);
+float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor,
+                                   int attempts_count,
+                                   int attempts_delay);
 ```
 Perform multiple measurements and return the average distance in millimiters or `NAN` on failure.
 
 |Parameter||
 |--|--|
 |sensor|Sensor instance.|
-|count|How many measurements to perform.|
+|attempts_count|How many measurement attempts to perform.|
+|attempts_delay|Delay (in milliseconds) between attempts. If 0(zero), the default 5ms delay value is used.|
 
 **Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
-float distance = mgos_hcsr04_get_distance_avg(my_hcsr04, 10);
+float distance = mgos_hcsr04_get_distance_avg(my_hcsr04,
+  10, DEFAULT_AVG_ATTEMPTS_DELAY);
 if (!isnan(distance))
   LOG(LL_INFO, ("Distance: %.2lf", distance));
 else
@@ -119,13 +123,14 @@ print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
 ### <sensor_instance>.getAvgDistance()
 ```js
-let distance myHCSR04.getAvgDistance(count);
+let distance myHCSR04.getAvgDistance(attemptsCount, attemptsDelay);
 ```
 Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
 
 |Parameter||
 |--|--|
-|count|How many measurements to perform.|
+|attemptsCount|How many measurement attempts to perform.|
+|attemptsDelay|Optional. Delay (in milliseconds) between attempts. If 0(zero) or not specified, the default 5ms delay value is used.|
 
 **Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
 ```js
