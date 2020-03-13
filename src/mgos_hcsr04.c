@@ -7,7 +7,7 @@ struct mgos_hcsr04 {
 };
 
 static inline uint64_t hcsr04_uptime() {
-  return (uint64_t)(1000000 * mgos_hcsr04_uptime());
+  return (uint64_t)(1000000 * mgos_uptime());
 }
 
 unsigned long hcsr04_pulse_in(uint8_t pin, uint8_t state, unsigned long timeout) {
