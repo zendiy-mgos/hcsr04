@@ -6,60 +6,36 @@ struct mgos_hcsr04 {
   int echo_pin;
 };
 
-static inline void mg_play_trig_sound(int trig_pin, uint32_t duration) {
-  //send trigger
-  mgos_gpio_write(trig_pin, 1);
-  // wait 'duration' microseconds (e.g.: 10)
-  mgos_usleep(duration);
-  // stop the trigger
-  mgos_gpio_write(trig_pin, 0);
+static inline uint64_t hcsr04_uptime() {
+  return (uint64_t)(1000000 * mgos_hcsr04_uptime());
 }
 
-static inline uint64_t uptime() {
-  return (uint64_t)(1000000 * mgos_uptime());
-}
-
-static inline float mg_await_echo(int echo_pin, uint32_t timeout) {
-  if (timeout == 0) timeout = 1000000L;
-  
-  uint64_t startMicros = uptime();
+unsigned long hcsr04_pulse_in(uint8_t pin, uint8_t state, unsigned long timeout) {
+  uint64_t start_us = hcsr04_uptime();
 
   // wait for any previous pulse to end
-  while (mgos_gpio_read(echo_pin) == 1) {
-    if ((uptime() - startMicros) > timeout) {
-      LOG(LL_ERROR, ("Error awaiting previous pulse to end, on pin %d", echo_pin));  
-      return NAN;
+  while (state == mgos_gpio_read(pin)) {
+    if ((hcsr04_uptime() - start_us) > timeout) {
+      return 0;
     }
   }
+
   // wait for the pulse to start
-  while (mgos_gpio_read(echo_pin) != 1) {
-    if ((uptime() - startMicros) > timeout) {
-      LOG(LL_ERROR, ("Error awaiting pulse to start, on pin %d", echo_pin));  
-      return NAN;
-    }
-  }  
-  // wait for the pulse to stop
-  uint64_t start = uptime();
-  while (mgos_gpio_read(echo_pin) == 1) {
-    if ((uptime() - startMicros) > timeout) {
-      LOG(LL_ERROR, ("Error awaiting pulse to stop, on pin %d", echo_pin));  
-      return NAN;
+  while (state != mgos_gpio_read(pin)) {
+    if ((hcsr04_uptime() - start_us) > timeout) {
+      return 0;
     }
   }
 
-  float duration = (uptime() - start);
-  return duration;
-}
+  uint64_t start = hcsr04_uptime();
 
-float mg_trig_echo_get_distance(int trig_pin, uint32_t trig_duration,
-                        int echo_pin, uint32_t echo_timeout) {
-  // play the trigger sound
-  mg_play_trig_sound(trig_pin, trig_duration);
-  // await the sound's echo
-  float duration = mg_await_echo(echo_pin, echo_timeout);
-  if (isnan(duration)) return NAN;
-  // calculate distance (millimiters)  
-  return ((duration * 0.034 / 2) * 10); 
+  // wait for the pulse to stop
+  while (state == mgos_gpio_read(pin)) {
+    if ((hcsr04_uptime() - start_us) > timeout) {
+      return 0;
+    }
+  }
+  return (uint32_t)(hcsr04_uptime() - start);
 }
 
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
@@ -80,10 +56,42 @@ void mgos_hcsr04_close(struct mgos_hcsr04 *handle) {
   handle = NULL;
 }
 
-float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) {  
+float mgos_hcsr04_get_distance_ex(struct mgos_hcsr04 *handle, float temperature) {
   if (handle == NULL) return NAN;
-  return mg_trig_echo_get_distance(handle->trig_pin,
-    10, handle->echo_pin, 0);
+  
+  // Make sure that trigger pin is LOW.
+  //digitalWrite(triggerPin, LOW);
+  mgos_gpio_write(handle->trig_pin, 0);
+  //delayMicroseconds(2);
+  mgos_usleep(2);
+
+  // Hold trigger for 10 microseconds, which is signal for sensor to measure distance.
+  //digitalWrite(triggerPin, HIGH);
+  mgos_gpio_write(handle->trig_pin, 1);
+  //delayMicroseconds(10);
+  mgos_usleep(10);
+  //digitalWrite(triggerPin, LOW);
+  mgos_gpio_write(handle->trig_pin, 0);
+  
+  // Measure the length of echo signal, which is equal to the time needed for sound to go there and back.
+  //unsigned long duration_us = pulseIn(echoPin, HIGH);
+  unsigned long duration_us = hcsr04_pulse_in(handle->echo_pin,
+    1, 1000000L);
+
+  // Speed of sound in cm/ms
+  float sound_speed = 0.03313 + 0.0000606 * temperature; // Cair ≈ (331.3 + 0.606 ⋅ ϑ) m/s
+  float distance_cm = duration_us / 2.0 * sound_speed;
+  if (distance_cm == 0 || distance_cm > 400) {
+    return NAN;
+  } else {
+    return (distance_cm * 10);
+  }
+}
+
+float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) {
+    //Using the approximate formula 19.307°C results in
+    // roughly 343m/s which is the commonly used value for air.
+    return mgos_hcsr04_get_distance_ex(handle, 19.307);
 }
 
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle,
@@ -104,6 +112,7 @@ float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle,
   }
   return (not_nan_count == 0 ? NAN : (result / not_nan_count));
 }
+
 
 bool mgos_hcsr04_init(void) {
   return true;
