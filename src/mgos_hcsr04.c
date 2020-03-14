@@ -82,10 +82,14 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) { 
   long duration = mgos_hcsr04_get_echo(handle);
   if (duration == -1) return NAN;
+
+  float temperature = 19.307;
     
   // Given the speed of sound in air is 332m/s = 3320cm/s = 0.0332cm/us).
-  float distance = (duration / 2) * 0.332;
-
+  //float distance = (duration / 2) * 0.332 + 0.0000606 * temperature;
+  float sound_speed = 0.3313 + 0.000606 * temperature; // Cair ≈ (331.3 + 0.606 ⋅ ϑ) m/s
+  float distance = (duration / 2) * sound_speed;
+  
 	return (distance < 0 ? NAN : distance);
 }
 
