@@ -79,7 +79,7 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
 
   // wait for the pulse to stop
   timeout = 1000000;
-  while (1 == mgos_gpio_read(handle->echo_pin && timeout > 0) {
+  while (1 == mgos_gpio_read(handle->echo_pin) && timeout > 0) {
     --timeout;
   }
   
