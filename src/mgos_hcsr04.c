@@ -75,10 +75,9 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
   return (mgos_time_micros() - pulse_start);
 }
 
-float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) {
-  if (handle == NULL) return NAN;
-  
-  unsigned long duration = mgos_hcsr04_get_echo();
+float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) { 
+  long duration = mgos_hcsr04_get_echo(handle);
+  if (duration == -1) return NAN;
     
   // Given the speed of sound in air is 332m/s = 3320cm/s = 0.0332cm/us).
   float distance = (duration / 2) * 0.332;
