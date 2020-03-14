@@ -68,8 +68,12 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
   mgos_usleep(10);
   mgos_gpio_write(handle->trig_pin, 0);
 
+  // wait for the pulse to start
+  while (1 != mgos_gpio_read(handle->echo_pin));
+
   int64_t pulse_start = mgos_time_micros();
 
+  // wait for the pulse to stop
   while (1 == mgos_gpio_read(handle->echo_pin));
 
   return (mgos_time_micros() - pulse_start);
