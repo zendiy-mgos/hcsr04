@@ -73,16 +73,16 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
   while (1 != mgos_gpio_read(handle->echo_pin) && timeout > 0) {
     --timeout;
   };
+  if (timeout == 0) return -1; //timeout
 
-  if (timeout != 0) {
-    int64_t pulse_start = mgos_time_micros();
+  int64_t pulse_start = mgos_time_micros();
 
-    // wait for the pulse to stop
-    timeout = 1000000;
-    while (1 == mgos_gpio_read(handle->echo_pin && timeout > 0) {
-      --timeout;
-    }
+  // wait for the pulse to stop
+  timeout = 1000000;
+  while (1 == mgos_gpio_read(handle->echo_pin && timeout > 0) {
+    --timeout;
   }
+  
   return (timeout > 0 ? (mgos_time_micros() - pulse_start) : -1);
 }
 
