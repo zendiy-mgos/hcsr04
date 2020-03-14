@@ -6,7 +6,7 @@ struct mgos_hcsr04 {
   int echo_pin;
 };
 
-static inline uint64_t hcsr04_uptime() {
+/* static inline uint64_t hcsr04_uptime() {
   return (uint64_t)(1000000 * mgos_uptime());
 }
 
@@ -36,7 +36,7 @@ unsigned long hcsr04_pulse_in(uint8_t pin, uint8_t state, unsigned long timeout)
     }
   }
   return (uint32_t)(hcsr04_uptime() - start);
-}
+} */
 
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
   if (!mgos_gpio_setup_output(trig_pin, 0) ||
@@ -56,42 +56,34 @@ void mgos_hcsr04_close(struct mgos_hcsr04 *handle) {
   handle = NULL;
 }
 
-float mgos_hcsr04_get_distance_ex(struct mgos_hcsr04 *handle, float temperature) {
-  if (handle == NULL) return NAN;
+long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
+  if (handle == NULL) return -1;
   
   // Make sure that trigger pin is LOW.
-  //digitalWrite(triggerPin, LOW);
   mgos_gpio_write(handle->trig_pin, 0);
-  //delayMicroseconds(2);
-  mgos_usleep(2);
+  mgos_usleep(5);
 
   // Hold trigger for 10 microseconds, which is signal for sensor to measure distance.
-  //digitalWrite(triggerPin, HIGH);
   mgos_gpio_write(handle->trig_pin, 1);
-  //delayMicroseconds(10);
   mgos_usleep(10);
-  //digitalWrite(triggerPin, LOW);
   mgos_gpio_write(handle->trig_pin, 0);
-  
-  // Measure the length of echo signal, which is equal to the time needed for sound to go there and back.
-  //unsigned long duration_us = pulseIn(echoPin, HIGH);
-  unsigned long duration_us = hcsr04_pulse_in(handle->echo_pin,
-    1, 1000000L);
 
-  // Speed of sound in cm/ms
-  float sound_speed = 0.03313 + 0.0000606 * temperature; // Cair ≈ (331.3 + 0.606 ⋅ ϑ) m/s
-  float distance_cm = duration_us / 2.0 * sound_speed;
-  if (distance_cm == 0 || distance_cm > 400) {
-    return NAN;
-  } else {
-    return (distance_cm * 10);
-  }
+  int64_t pulse_start = mgos_time_micros();
+
+  while (1 == mgos_gpio_read(handle->echo_pin));
+
+  return (mgos_time_micros() - pulse_start);
 }
 
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) {
-    //Using the approximate formula 19.307°C results in
-    // roughly 343m/s which is the commonly used value for air.
-    return mgos_hcsr04_get_distance_ex(handle, 19.307);
+  if (handle == NULL) return NAN;
+  
+  unsigned long duration = mgos_hcsr04_get_echo();
+    
+  // Given the speed of sound in air is 332m/s = 3320cm/s = 0.0332cm/us).
+  float distance = (duration / 2) * 0.332;
+
+	return (distance < 0 ? NAN : distance);
 }
 
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle,

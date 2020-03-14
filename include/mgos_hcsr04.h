@@ -42,6 +42,9 @@ struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin);
 /* Close sensor's handle. */
 void mgos_hcsr04_close(struct mgos_hcsr04 *handle);
 
+/* Return echo duration in milliseconds or -1 on failure. */
+long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle);
+
 /* Return distance in millimiters or 'NAN' on failure. */
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
 
