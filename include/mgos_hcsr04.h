@@ -50,7 +50,7 @@ float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle);
 
 /* Return distance in millimiters or 'NAN' on failure. */
 float mgos_hcsr04_get_distance_ex(struct mgos_hcsr04 *handle,
-                                  float temperature) 
+                                  float temperature);
 
 /* Perform multiple measurements and return the average
  * distance in millimiters or 'NAN' on failure.
