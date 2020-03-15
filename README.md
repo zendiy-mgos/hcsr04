@@ -37,7 +37,7 @@ struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```c
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *sensor);
 ```
-Return distance in millimiters or `NAN` on failure.
+Return distance in millimiters or `NAN` on failure. The default air temperature (19.307°C) is used for calculating the sound speed.
 
 |Parameter||
 |--|--|
@@ -52,11 +52,56 @@ if (!isnan(distance))
 else
   LOG(LL_ERROR, ("Distance: error reading distance"));
 ```
+### mgos_hcsr04_get_distance_t()
+```c
+float mgos_hcsr04_get_distance_t(struct mgos_hcsr04 *sensor, float temperature);
+```
+Return distance in millimiters or `NAN` on failure.
+
+|Parameter||
+|--|--|
+|sensor|Sensor instance.|
+|temperature|Air temperature in °C.|
+
+**Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance considering 20.5°C air temperature.
+```c
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
+float distance = mgos_hcsr04_get_distance_t(my_hcsr04, 20.5);
+if (!isnan(distance))
+  LOG(LL_INFO, ("Distance: %.2lf", distance));
+else
+  LOG(LL_ERROR, ("Distance: error reading distance"));
+```
 ### mgos_hcsr04_get_distance_avg()
 ```c
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *sensor,
                                    int attempts_count,
                                    int attempts_delay);
+```
+Perform multiple measurements and return the average distance in millimiters or `NAN` on failure. The default air temperature (19.307°C) is used for calculating the sound speed.
+
+|Parameter||
+|--|--|
+|sensor|Sensor instance.|
+|attempts_count|How many measurement attempts to perform.|
+|attempts_delay|Delay (in milliseconds) between attempts. If -1, the default 5ms delay value is used.|
+
+**Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
+```c
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
+float distance = mgos_hcsr04_get_distance_avg(my_hcsr04,
+  10, DEFAULT_AVG_ATTEMPTS_DELAY);
+if (!isnan(distance))
+  LOG(LL_INFO, ("Distance: %.2lf", distance));
+else
+  LOG(LL_ERROR, ("Distance: error reading distance"));
+```
+### mgos_hcsr04_get_distance_avg_t()
+```c
+float mgos_hcsr04_get_distance_avg_t(struct mgos_hcsr04 *sensor,
+                                     int attempts_count,
+                                     int attempts_delay,
+                                     float temperature);
 ```
 Perform multiple measurements and return the average distance in millimiters or `NAN` on failure.
 
@@ -64,13 +109,14 @@ Perform multiple measurements and return the average distance in millimiters or 
 |--|--|
 |sensor|Sensor instance.|
 |attempts_count|How many measurement attempts to perform.|
-|attempts_delay|Delay (in milliseconds) between attempts. If 0(zero), the default 5ms delay value is used.|
+|attempts_delay|Delay (in milliseconds) between attempts. If -1, the default 5ms delay value is used.|
+|temperature|Air temperature in °C.|
 
-**Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
+**Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance considering 20.5°C air temperature.
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
-float distance = mgos_hcsr04_get_distance_avg(my_hcsr04,
-  10, DEFAULT_AVG_ATTEMPTS_DELAY);
+float distance = mgos_hcsr04_get_distance_avg_t(my_hcsr04,
+  10, DEFAULT_AVG_ATTEMPTS_DELAY, 20.5);
 if (!isnan(distance))
   LOG(LL_INFO, ("Distance: %.2lf", distance));
 else
