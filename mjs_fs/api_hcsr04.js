@@ -44,10 +44,8 @@ let HCSR04 = {
     // **`sensor.getDistance(temperature)`**
     // Return distance in millimiters or 'NaN' in case of a failure.
     getDistance: function(temperature) {
-      if (temperature)
-        return HCSR04._gde(this.handle, temperature);
-      else
-        return HCSR04._gd(this.handle);
+      return (temperature ? HCSR04._gde(this.handle, temperature) :
+        HCSR04._gd(this.handle));
     },
 
     // **`sensor.getAvgDistance(attemptsCount, attemptsDelay)`**
