@@ -117,7 +117,7 @@ float mgos_hcsr04_get_distance_avg_t(struct mgos_hcsr04 *handle,
   int not_nan_count = 0;
   float result = 0;
   if (handle != NULL) {
-    if (attempts_delay <= 0) attempts_delay = DEFAULT_AVG_ATTEMPTS_DELAY;
+    if (attempts_delay == -1) attempts_delay = DEFAULT_AVG_ATTEMPTS_DELAY;
     for (int i = 0; i < attempts_count; ++i) {
       if (i > 0) mgos_msleep(attempts_delay);
       float m = mgos_hcsr04_get_distance_t(handle, temperature);

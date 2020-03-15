@@ -60,12 +60,12 @@ let HCSR04 = {
       if (temperature) {
         return HCSR04._gdavgt(this.handle,
                               (attemptsCount || 0),
-                              (attemptsDelay || 0),
+                              (attemptsDelay || -1),
                               temperature);
       }
       return HCSR04._gdavg(this.handle,
                            (attemptsCount || 0),
-                           (attemptsDelay || 0));
+                           (attemptsDelay || -1));
     },
   },
 };
