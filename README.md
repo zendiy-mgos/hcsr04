@@ -84,7 +84,7 @@ Perform multiple measurements and return the average distance in millimiters or 
 |--|--|
 |sensor|Sensor instance.|
 |attempts_count|How many measurement attempts to perform.|
-|attempts_delay|Delay (in milliseconds) between attempts. If -1, the default 5ms delay value is used.|
+|attempts_delay|Delay (in milliseconds) between attempts. If -1, the DEFAULT_AVG_ATTEMPTS_DELAY value is used (5ms).|
 
 **Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
 ```c
@@ -109,7 +109,7 @@ Perform multiple measurements and return the average distance in millimiters or 
 |--|--|
 |sensor|Sensor instance.|
 |attempts_count|How many measurement attempts to perform.|
-|attempts_delay|Delay (in milliseconds) between attempts. If -1, the default 5ms delay value is used.|
+|attempts_delay|Delay (in milliseconds) between attempts. If -1, the DEFAULT_AVG_ATTEMPTS_DELAY value is used (5ms).|
 |temperature|Air temperature in °C.|
 
 **Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance considering 20.5°C air temperature.
@@ -157,9 +157,13 @@ let myHCSR04 = HCSR04.create(2, 12);
 ```
 ### <sensor_instance>.getDistance()
 ```js
-let distance myHCSR04.getDistance();
+let distance myHCSR04.getDistance(temperature);
 ```
 Return distance in millimiters or `NaN` on failure.
+
+|Parameter||
+|--|--|
+|temperature|Optional. Air temperature in °C. If not specified, the default value is used (19.307°C).|
 
 **Example** - Create and initialize an HC-SR04 sensor instance and print the measured distance.
 ```js
@@ -169,14 +173,15 @@ print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
 ### <sensor_instance>.getAvgDistance()
 ```js
-let distance myHCSR04.getAvgDistance(attemptsCount, attemptsDelay);
+let distance myHCSR04.getAvgDistance(attemptsCount, attemptsDelay, temperature);
 ```
 Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
 
 |Parameter||
 |--|--|
 |attemptsCount|How many measurement attempts to perform.|
-|attemptsDelay|Optional. Delay (in milliseconds) between attempts. If 0(zero) or not specified, the default 5ms delay value is used.|
+|attemptsDelay|Optional. Delay (in milliseconds) between attempts. If -1 or not specified, the default value is used (5ms).|
+|temperature|Optional. Air temperature in °C. If not specified, the default value is used (19.307°C).|
 
 **Example** - Create and initialize an HC-SR04 sensor instance, perform 10 measurements and print the average measured distance.
 ```js
