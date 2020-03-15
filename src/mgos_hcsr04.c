@@ -100,7 +100,7 @@ float mgos_hcsr04_get_distance_t(struct mgos_hcsr04 *handle, float temperature) 
   float distance = (duration / 2) * sound_speed;
   if (distance > 4003) return NAN;
   if (distance < 19.7) return NAN;
-  return 
+  return distance;
 }
 
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle,
