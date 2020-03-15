@@ -4,10 +4,11 @@
 let HCSR04 = {
   _crt: ffi('void *mgos_hcsr04_create(int, int)'),
   _cls: ffi('void mgos_hcsr04_close(void *)'),
-  _ge: ffi('long mgos_hcsr04_get_echo(void *)'),
+  _ge: ffi('int mgos_hcsr04_get_echo(void *)'),
   _gd: ffi('float mgos_hcsr04_get_distance(void *)'),
-  _gde: ffi('float mgos_hcsr04_get_distance_ex(void *, float)'),
-  _gavgd: ffi('float mgos_hcsr04_get_distance_avg(void *, int, int)'),
+  _gdt: ffi('float mgos_hcsr04_get_distance_t(void *, float)'),
+  _gdavg: ffi('float mgos_hcsr04_get_distance_avg(void *, int, int)'),
+  _gdavgt: ffi('float mgos_hcsr04_get_distance_avg_t(void *, int, int, float)'),
 
   // **`HCSR04.create(trig_pin, echo_pin)`**
   // Create a HC-SR04 sensor instance.
@@ -44,8 +45,10 @@ let HCSR04 = {
     // **`sensor.getDistance(temperature)`**
     // Return distance in millimiters or 'NaN' in case of a failure.
     getDistance: function(temperature) {
-      return (temperature ? HCSR04._gde(this.handle, temperature) :
-        HCSR04._gd(this.handle));
+      if (temperature) {
+        return HCSR04._gdt(this.handle, temperature);
+      }
+      return HCSR04._gd(this.handle);
     },
 
     // **`sensor.getAvgDistance(attemptsCount, attemptsDelay)`**
@@ -53,9 +56,15 @@ let HCSR04 = {
     // distance (in millimiters) or 'NaN' in case of a failure.
     // If attemptsDelay is 0(zero) or not specified, the default
     // 5ms delay value is used. 
-    getAvgDistance: function(attemptsCount, attemptsDelay) {
-      return HCSR04._gavgd(this.handle,
-                           attemptsCount,
+    getAvgDistance: function(attemptsCount, attemptsDelay, temperature) {
+      if (temperature) {
+        return HCSR04._gdavgt(this.handle,
+                              (attemptsCount || 0),
+                              (attemptsDelay || 0),
+                              temperature);
+      }
+      return HCSR04._gdavg(this.handle,
+                           (attemptsCount || 0),
                            (attemptsDelay || 0));
     },
   },

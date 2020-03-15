@@ -2,7 +2,7 @@
 #include "mgos.h"
 #include "mgos_hcsr04.h"
 
-struct mgos_hcsr04 {  
+struct mgos_hcsr04 {
   int trig_pin;
   int echo_pin;
 };
@@ -88,12 +88,13 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
 }
 
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) { 
-  return mgos_hcsr04_get_distance_ex(handle, 19.307);
+  return mgos_hcsr04_get_distance_t(handle,
+    DEFAULT_TEMPERATURE);
 }
 
-float mgos_hcsr04_get_distance_ex(struct mgos_hcsr04 *handle, float temperature) { 
+float mgos_hcsr04_get_distance_t(struct mgos_hcsr04 *handle, float temperature) { 
   long duration = mgos_hcsr04_get_echo(handle);
-  if (duration == -1) return NAN;
+  if (duration == -1 || duration > 4003) return NAN;
     
   float sound_speed = 0.3313 + 0.000606 * temperature; // Cair ≈ (331.3 + 0.606 ⋅ ϑ) m/s
   return (duration / 2) * sound_speed;
@@ -102,13 +103,21 @@ float mgos_hcsr04_get_distance_ex(struct mgos_hcsr04 *handle, float temperature)
 float mgos_hcsr04_get_distance_avg(struct mgos_hcsr04 *handle,
                                    int attempts_count,
                                    int attempts_delay) {
+  return mgos_hcsr04_get_distance_avg_t(handle, attempts_count,
+    attempts_delay, DEFAULT_TEMPERATURE);
+}
+
+float mgos_hcsr04_get_distance_avg_t(struct mgos_hcsr04 *handle,
+                                     int attempts_count,
+                                     int attempts_delay,
+                                     float temperature) {
   int not_nan_count = 0;
   float result = 0;
   if (handle != NULL) {
     if (attempts_delay <= 0) attempts_delay = DEFAULT_AVG_ATTEMPTS_DELAY;
     for (int i = 0; i < attempts_count; ++i) {
       if (i > 0) mgos_msleep(attempts_delay);
-      float m = mgos_hcsr04_get_distance(handle);
+      float m = mgos_hcsr04_get_distance_t(handle, temperature);
       if (!isnan(m)) {
         result += m;
         ++not_nan_count;
