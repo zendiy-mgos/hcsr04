@@ -7,38 +7,6 @@ struct mgos_hcsr04 {
   int echo_pin;
 };
 
-/* static inline uint64_t hcsr04_uptime() {
-  return (uint64_t)(1000000 * mgos_uptime());
-}
-
-unsigned long hcsr04_pulse_in(uint8_t pin, uint8_t state, unsigned long timeout) {
-  uint64_t start_us = hcsr04_uptime();
-
-  // wait for any previous pulse to end
-  while (state == mgos_gpio_read(pin)) {
-    if ((hcsr04_uptime() - start_us) > timeout) {
-      return 0;
-    }
-  }
-
-  // wait for the pulse to start
-  while (state != mgos_gpio_read(pin)) {
-    if ((hcsr04_uptime() - start_us) > timeout) {
-      return 0;
-    }
-  }
-
-  uint64_t start = hcsr04_uptime();
-
-  // wait for the pulse to stop
-  while (state == mgos_gpio_read(pin)) {
-    if ((hcsr04_uptime() - start_us) > timeout) {
-      return 0;
-    }
-  }
-  return (uint32_t)(hcsr04_uptime() - start);
-} */
-
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin) {
   if (!mgos_gpio_setup_output(trig_pin, 0) ||
       !mgos_gpio_setup_input(echo_pin, MGOS_GPIO_PULL_UP)) {

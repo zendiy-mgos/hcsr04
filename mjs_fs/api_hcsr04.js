@@ -4,7 +4,9 @@
 let HCSR04 = {
   _crt: ffi('void *mgos_hcsr04_create(int, int)'),
   _cls: ffi('void mgos_hcsr04_close(void *)'),
+  _ge: ffi('long mgos_hcsr04_get_echo(void *)'),
   _gd: ffi('float mgos_hcsr04_get_distance(void *)'),
+  _gde: ffi('float mgos_hcsr04_get_distance_ex(void *, float)'),
   _gavgd: ffi('float mgos_hcsr04_get_distance_avg(void *, int, int)'),
 
   // **`HCSR04.create(trig_pin, echo_pin)`**
@@ -33,10 +35,19 @@ let HCSR04 = {
       return HCSR04._cls(this.handle);
     },
 
-    // **`sensor.getDistance()`**
+    // **`sensor.getEcho()`**
+    // Return echo duration in microseconds or -1 on failure.
+    getEcho: function() {
+      return HCSR04._ge(this.handle);
+    },
+
+    // **`sensor.getDistance(temperature)`**
     // Return distance in millimiters or 'NaN' in case of a failure.
-    getDistance: function() {
-      return HCSR04._gd(this.handle);
+    getDistance: function(temperature) {
+      if (temperature)
+        return HCSR04._gde(this.handle, temperature);
+      else
+        return HCSR04._gd(this.handle);
     },
 
     // **`sensor.getAvgDistance(attemptsCount, attemptsDelay)`**
