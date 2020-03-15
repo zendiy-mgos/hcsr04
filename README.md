@@ -33,6 +33,25 @@ Create and initialize the sensor instance. Return the instance, or `NULL` on err
 ```c
 struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```
+### mgos_hcsr04_get_echo()
+```c
+long mgos_hcsr04_get_echo(struct mgos_hcsr04 *sensor);
+```
+Return echo duration in microseconds or `-1` on failure.
+
+|Parameter||
+|--|--|
+|sensor|Sensor instance.|
+
+**Example** - Create and initialize an HC-SR04 sensor instance and print the computed echo's duration.
+```c
+struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
+long duration = mgos_hcsr04_get_echo(my_hcsr04);
+if (duration != -1)
+  LOG(LL_INFO, ("Echo duration: %.2lf(microseconds)", duration));
+else
+  LOG(LL_ERROR, ("Echo duration: error computing duration"));
+```
 ### mgos_hcsr04_get_distance()
 ```c
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *sensor);
@@ -154,6 +173,18 @@ Create and initialize the sensor instance. Return the instance, or `null` on err
 **Example** - Create and initialize an HC-SR04 sensor instance.
 ```js
 let myHCSR04 = HCSR04.create(2, 12);
+```
+### <sensor_instance>.getEcho()
+```js
+let duration myHCSR04.getEcho();
+```
+Return echo duration in microseconds or `-1` on failure.
+
+**Example** - Create and initialize an HC-SR04 sensor instance and print the computed echo's duration.
+```js
+let myHCSR04 = HCSR04.create(2, 12);
+let duration = myHCSR04.getEcho();
+print('Echo duration:', (duration == -1 ? 'error computing duration' : duration));
 ```
 ### <sensor_instance>.getDistance()
 ```js
