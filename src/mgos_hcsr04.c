@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "mgos.h"
 #include "mgos_hcsr04.h"
 
@@ -58,7 +59,11 @@ void mgos_hcsr04_close(struct mgos_hcsr04 *handle) {
 
 long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
   if (handle == NULL) return -1;
-  
+
+  uint32_t timeout = 1000000L;
+  uint64_t check_ticks;
+  int64_t pulse_start;
+
   // Make sure that trigger pin is LOW.
   mgos_gpio_write(handle->trig_pin, 0);
   mgos_usleep(5);
@@ -67,23 +72,51 @@ long mgos_hcsr04_get_echo(struct mgos_hcsr04 *handle) {
   mgos_gpio_write(handle->trig_pin, 1);
   mgos_usleep(10);
   mgos_gpio_write(handle->trig_pin, 0);
+  
+  // wait for any previous pulse to end
+  pulse_start = mgos_time_micros();
+  check_ticks = UINT64_MAX;
+  while (1 == mgos_gpio_read(handle->echo_pin)) {
+    --check_ticks;
+    if (check_ticks == 0) {
+      if ((mgos_time_micros() - pulse_start) > timeout) {
+        LOG(LL_ERROR, ("Error awaiting previous pulse to end, on pin %d", handle->echo_pin));  
+        return -1;
+      }
+      check_ticks = UINT64_MAX;
+    }
+  };
 
   // wait for the pulse to start
-  uint64_t timeout = 1000000;
-  while (1 != mgos_gpio_read(handle->echo_pin) && timeout > 0) {
-    --timeout;
+  pulse_start = mgos_time_micros();
+  check_ticks = UINT64_MAX;
+  while (1 != mgos_gpio_read(handle->echo_pin)) {
+    --check_ticks;
+    if (check_ticks == 0) {
+      if ((mgos_time_micros() - pulse_start) > timeout) {
+        LOG(LL_ERROR, ("Error awaiting pulse to start, on pin %d", handle->echo_pin));  
+        return -1;
+      }
+      check_ticks = UINT64_MAX;
+    }
   };
-  if (timeout == 0) return -1; //timeout
-
-  int64_t pulse_start = mgos_time_micros();
+  
+  pulse_start = mgos_time_micros();
 
   // wait for the pulse to stop
-  timeout = 10000000;
-  while (1 == mgos_gpio_read(handle->echo_pin) && timeout > 0) {
-    --timeout;
-  }
+  check_ticks = UINT64_MAX;
+  while (1 == mgos_gpio_read(handle->echo_pin)) {
+    --check_ticks;
+    if (check_ticks == 0) {
+      if ((mgos_time_micros() - pulse_start) > timeout) {
+        LOG(LL_ERROR, ("Error awaiting pulse to stop, on pin %d", handle->echo_pin));  
+        return -1;
+      }
+      check_ticks = UINT64_MAX;
+    }
+  };
   
-  return (timeout > 0 ? (mgos_time_micros() - pulse_start) : -1);
+  return (mgos_time_micros() - pulse_start);
 }
 
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *handle) { 
