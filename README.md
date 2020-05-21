@@ -174,9 +174,9 @@ Create and initialize the sensor instance. Returns the instance, or `null` on er
 ```js
 let myHCSR04 = HCSR04.create(2, 12);
 ```
-### <sensor_instance>.getEcho()
+### <instance>.getEcho()
 ```js
-let duration myHCSR04.getEcho();
+let duration = myHCSR04.getEcho();
 ```
 Returns echo duration in microseconds or `-1` on failure.
 
@@ -186,9 +186,9 @@ let myHCSR04 = HCSR04.create(2, 12);
 let duration = myHCSR04.getEcho();
 print('Echo duration:', (duration == -1 ? 'error computing duration' : duration));
 ```
-### <sensor_instance>.getDistance()
+### <instance>.getDistance()
 ```js
-let distance myHCSR04.getDistance(temperature);
+let distance = myHCSR04.getDistance(temperature);
 ```
 Returns distance in millimiters or `NaN` on failure.
 
@@ -202,9 +202,9 @@ let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getDistance();
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
-### <sensor_instance>.getAvgDistance()
+### <instance>.getAvgDistance()
 ```js
-let distance myHCSR04.getAvgDistance(attemptsCount, attemptsDelay, temperature);
+let distance = myHCSR04.getAvgDistance(attemptsCount, attemptsDelay, temperature);
 ```
 Perform multiple measurements and return the average distance in millimiters or `NaN` on failure.
 
@@ -220,7 +220,7 @@ let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getAvgDistance(10);
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
-### <sensor_instance>.close()
+### <instance>.close()
 ```js
 myHCSR04.close();
 ```
