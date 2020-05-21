@@ -2,7 +2,7 @@
 ## Overview
 A Mongoose OS library for HC-SR04, a popular ultrasonic distance sensor, and for a bunch of [compatible sensors](#compatible-sensors).
 ## GET STARTED
-Build up your device in few minutes just starting from one of the following samples.
+Build up your own device in few minutes just starting from one of the following samples.
 
 |Sample|Notes|
 |--|--|
@@ -22,7 +22,7 @@ load('api_hcsr04.js');
 ```c
 struct mgos_hcsr04 *mgos_hcsr04_create(int trig_pin, int echo_pin);
 ```
-Create and initialize the sensor instance. Return the instance, or `NULL` on error.
+Create and initialize the sensor instance. Returns the instance, or `NULL` on error.
 
 |Parameter||
 |--|--|
@@ -37,7 +37,7 @@ struct mgos_hcsr04 *my_hcsr04 = mgos_hcsr04_create(2, 12);
 ```c
 long mgos_hcsr04_get_echo(struct mgos_hcsr04 *sensor);
 ```
-Return echo duration in microseconds or `-1` on failure.
+Returns echo duration in microseconds or `-1` on failure.
 
 |Parameter||
 |--|--|
@@ -56,7 +56,7 @@ else
 ```c
 float mgos_hcsr04_get_distance(struct mgos_hcsr04 *sensor);
 ```
-Return distance in millimiters or `NAN` on failure. The default air temperature (19.307°C) is used for calculating the sound speed.
+Returns distance in millimiters or `NAN` on failure. The default air temperature (19.307°C) is used for calculating the sound speed.
 
 |Parameter||
 |--|--|
@@ -75,7 +75,7 @@ else
 ```c
 float mgos_hcsr04_get_distance_t(struct mgos_hcsr04 *sensor, float temperature);
 ```
-Return distance in millimiters or `NAN` on failure.
+Returns distance in millimiters or `NAN` on failure.
 
 |Parameter||
 |--|--|
@@ -163,7 +163,7 @@ mgos_hcsr04_close(my_hcsr04);
 ```js
 HCSR04.create(trig_pin, echo_pin);
 ```
-Create and initialize the sensor instance. Return the instance, or `null` on error.
+Create and initialize the sensor instance. Returns the instance, or `null` on error.
 
 |Parameter||
 |--|--|
@@ -178,7 +178,7 @@ let myHCSR04 = HCSR04.create(2, 12);
 ```js
 let duration myHCSR04.getEcho();
 ```
-Return echo duration in microseconds or `-1` on failure.
+Returns echo duration in microseconds or `-1` on failure.
 
 **Example** - Create and initialize an HC-SR04 sensor instance and print the computed echo's duration.
 ```js
@@ -190,7 +190,7 @@ print('Echo duration:', (duration == -1 ? 'error computing duration' : duration)
 ```js
 let distance myHCSR04.getDistance(temperature);
 ```
-Return distance in millimiters or `NaN` on failure.
+Returns distance in millimiters or `NaN` on failure.
 
 |Parameter||
 |--|--|
