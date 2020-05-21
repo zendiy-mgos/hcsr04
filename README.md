@@ -174,7 +174,7 @@ Create and initialize the sensor instance. Returns the instance, or `null` on er
 ```js
 let myHCSR04 = HCSR04.create(2, 12);
 ```
-### <instance>.getEcho()
+### .getEcho()
 ```js
 let duration = myHCSR04.getEcho();
 ```
@@ -186,7 +186,7 @@ let myHCSR04 = HCSR04.create(2, 12);
 let duration = myHCSR04.getEcho();
 print('Echo duration:', (duration == -1 ? 'error computing duration' : duration));
 ```
-### <instance>.getDistance()
+### .getDistance()
 ```js
 let distance = myHCSR04.getDistance(temperature);
 ```
@@ -202,7 +202,7 @@ let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getDistance();
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
-### <instance>.getAvgDistance()
+### .getAvgDistance()
 ```js
 let distance = myHCSR04.getAvgDistance(attemptsCount, attemptsDelay, temperature);
 ```
@@ -220,7 +220,7 @@ let myHCSR04 = HCSR04.create(2, 12);
 let distance = myHCSR04.getAvgDistance(10);
 print('Distance:', (isNaN(distance) ? 'error reading distance' : distance));
 ```
-### <instance>.close()
+### .close()
 ```js
 myHCSR04.close();
 ```
